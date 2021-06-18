@@ -11,16 +11,6 @@ let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, (err) => {
 
 const app = express();
 
-db.run('select * from crud',[], (err, rows) => {
-  if(err) throw err
-
-  if(rows){
-    var jumlahData = rows.length;
-    var jumlahHalaman = Math.ceil(jumlahData / 2);
-
-  }
-})
-
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // parse application/x-www-form-urlencoded
@@ -33,7 +23,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 app.get('/', (req, res) => {
   let query = `SELECT * FROM crud limit 2 offset 0`
-  let page = parseInt(req.query.page);
+  var page = parseInt(req.query.page);
   let size = parseInt(req.query.size);
   let offset = page * size;
   if(page && size){
@@ -49,19 +39,21 @@ app.get('/', (req, res) => {
         
         res.render('index', {data: rows, jumlahData, jumlahHalaman, page})
       }
-
     })
   })
 })
 
 app.post('/', (req, res) => {
+  var page = parseInt(req.query.page);
   let query = `select * from crud where tanggal BETWEEN '${req.body.start}' and '${req.body.end}' and string like '%${req.body.string}%' and angka = ${req.body.integer} and desimal = ${req.body.float} and booleann = '${req.body.boolean}'`
   db.all(query, [], (err, rows) => {
-    if(err) throw err;
-
-    if(rows){
-      res.render('index', {data: rows})
-    }
+  
+      if(rows){
+        var jumlahData = rows.length
+        var jumlahHalaman = Math.ceil(jumlahData / 2);
+        res.render('index', {data: rows, jumlahData, jumlahHalaman, page})
+      }
+    
   })
 })
 

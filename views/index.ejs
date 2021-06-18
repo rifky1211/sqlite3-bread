@@ -37,6 +37,7 @@
       </select>
 
      <button type="submit" class="btn-search">Search</button>
+     <a href="/" class="btn-add">Reset</a>
     </form>
 
     <table class="table">
@@ -49,6 +50,7 @@
         <th>Boolean</th>
         <th>Action</th>
       </tr>
+
 
       <% data.forEach((item, index) => { %>
       <tr>
@@ -80,10 +82,5 @@
      
     </div>
     <div><a href="/add" class="btn-add">Add</a></div>
-
-    <script>
-      let a = document.getElementById(date)
-      moment(a).format("d-MMM-YYYY");
-  </script>
   </body>
 </html>
